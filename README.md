@@ -20,10 +20,52 @@ sudo unzip sonarqube-7.2.1.zip
 ```sh
 sudo chown -R ec2-user.ec2-user sonarqube-7.2.1
 ```
-## Start Sonar
-### Step6
+## Run Sonarqube as a service
+### Step1
+* Create the file /etc/init.d/sonar with this content:
 ```sh
-/opt/sonarqube-7.2.1/bin/linux-x86-64/sonar.sh start
+#!/bin/sh
+#
+# rc file for SonarQube
+#
+# chkconfig: 345 96 10
+# description: SonarQube system (www.sonarsource.org)
+#
+### BEGIN INIT INFO
+# Provides: sonar
+# Required-Start: $network
+# Required-Stop: $network
+# Default-Start: 3 4 5
+# Default-Stop: 0 1 2 6
+# Short-Description: SonarQube system (www.sonarsource.org)
+# Description: SonarQube system (www.sonarsource.org)
+### END INIT INFO
+ 
+/usr/bin/sonar $*
+```
+### Step2
+* Register SonarQube at boot time (RedHat, CentOS, 64 bit):
+```sh
+sudo ln -s $SONAR_HOME/bin/linux-x86-64/sonar.sh /usr/bin/sonar
+```
+* Here $SONAR_HOME = /opt/sonarqube/(path of sonarqube installed)
+```sh
+sudo chmod 755 /etc/init.d/sonar
+```
+```sh
+sudo chkconfig --add sonar
+```
+* Start the Sonarqube
+```sh
+sudo service sonar start
+```
+* To start sonarqube automatically when your ec2 reboot or restarts
+```sh
+sudo chkconfig sonar on
+```
+* Check the sonarqube status
+```sh
+sudo service sonar status
 ```
 ### Sonar default port is 9000
 ### Default username and password is admin/admin
