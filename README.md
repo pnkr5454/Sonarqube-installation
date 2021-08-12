@@ -24,6 +24,9 @@ sudo chown -R ec2-user.ec2-user sonarqube-7.2.1
 ### Step1
 * Create the file /etc/init.d/sonar with this content:
 ```sh
+sudo vi /etc/init.d/sonar
+```
+```sh
 #!/bin/sh
 #
 # rc file for SonarQube
